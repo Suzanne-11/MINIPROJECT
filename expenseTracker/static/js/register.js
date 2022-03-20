@@ -5,7 +5,7 @@ const emailFeedbackArea = document.querySelector(".emailFeedbackArea");
 const usernameSuccessOutput = document.querySelector('.usernameSuccessOutput');
 const emailSuccessOutput = document.querySelector('.emailSuccessOutput');
 const showPasswordToggle = document.querySelector('.showPasswordToggle');
-
+const submitBtn = document.querySelector(".submit-btn");
 
 emailField.addEventListener('keyup',(e)=>{
 
@@ -26,9 +26,13 @@ emailField.addEventListener('keyup',(e)=>{
             console.log('data', data);
             emailSuccessOutput.style.display='none';
             if(data.email_error){
+                submitBtn.setAttribute("disabled","disabled");
+                submitBtn.disabled = true;
                 emailField.classList.add('is-invalid');
                 emailFeedbackArea.style.display = 'block';
                 emailFeedbackArea.innerHTML = `<p>${data.email_error}</p>`;
+            }else{
+                submitBtn.removeAttribute("disabled");
             }
         }); //post request
     }
@@ -51,13 +55,17 @@ usernameField.addEventListener('keyup',(e)=>{
         fetch('/authentication/validate-username',{
             body: JSON.stringify({username: usernameVal}),
             method: "POST",
-        }).then(res=>res.json()).then(data=>{
-            console.log('data', data);
+        }).then(res=>res.json())
+          .then(data=>{
             usernameSuccessOutput.style.display='none';
             if(data.username_error){
                 usernameField.classList.add('is-invalid');
                 feedbackArea.style.display = 'block';
                 feedbackArea.innerHTML = `<p>${data.username_error}</p>`;
+                submitBtn.disabled = true;
+            }
+            else{
+                submitBtn.removeAttribute("disabled");
             }
         }); //post request
     }
